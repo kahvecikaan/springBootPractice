@@ -8,7 +8,9 @@ import com.project.rentACar.business.responses.GetAllBrandsResponse;
 import com.project.rentACar.business.responses.GetByIdBrandResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,28 +22,32 @@ public class BrandsController {
     private BrandService brandService;
 
     @GetMapping()
-    public List<GetAllBrandsResponse> getAll() {
-        return this.brandService.getAll();
+    public ResponseEntity<List<GetAllBrandsResponse>> getAll() {
+        var response = brandService.getAll();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}") // like /api/brands/1
-    public GetByIdBrandResponse getById(@PathVariable int id) { // get id from path
-        return brandService.getById(id);
+    public ResponseEntity<GetByIdBrandResponse> getById(@PathVariable int id) { // get id from path
+        var response = brandService.getById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping()
-    @ResponseStatus(code = HttpStatus.CREATED) // 201
-    public void add(@RequestBody() @Valid() CreateBrandRequest request) {
+    public ResponseEntity<Void> add(@RequestBody() @Valid() CreateBrandRequest request) {
         this.brandService.add(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping // put for update
-    public void update(UpdateBrandRequest request) {
+    public ResponseEntity<Void> update(UpdateBrandRequest request) {
         this.brandService.update(request);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}") // like /api/brands/1
-    public void delete(@PathVariable int id) { // get id from path
+    public ResponseEntity<Void> delete(@PathVariable int id) { // get id from path
         this.brandService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
