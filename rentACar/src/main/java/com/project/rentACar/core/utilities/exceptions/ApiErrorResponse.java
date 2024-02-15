@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidationProblemDetails extends ProblemDetails{
-    private Map<String, String> validationErrors;
-
-
+public class ApiErrorResponse {
+    private String errorCode;
+    private String errorMessage;
+    private List<String> details;
 }
