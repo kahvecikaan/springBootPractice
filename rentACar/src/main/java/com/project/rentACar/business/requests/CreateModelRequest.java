@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CreateModelRequest {
     @NotNull
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 2, max = 50)
     private String name;
     private int brandId;
 }
