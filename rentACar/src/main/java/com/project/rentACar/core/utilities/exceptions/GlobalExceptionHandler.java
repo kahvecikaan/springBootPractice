@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,10 +31,27 @@ public class GlobalExceptionHandler{
         return ResponseEntity.badRequest().body(apiErrorResponse);
     }
 
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleBrandNotFoundException(BrandNotFoundException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("BRAND_NOT_FOUND", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ModelNameAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleModelNameAlreadyExistsException(ModelNameAlreadyExistsException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("MODEL_NAME_ALREADY_EXISTS", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ModelNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleModelNotFoundException(ModelNotFoundException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("MODEL_NOT_FOUND", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
     // Generic exception handler
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetails> handleAllExceptions(Exception ex, WebRequest request) {
+    public ResponseEntity<ProblemDetails> handleAllExceptions(Exception ex) {
         logger.error("Exception: {}", ex.getMessage(), ex);
         ProblemDetails problemDetails = new ProblemDetails("An unexpected error occurred");
         return ResponseEntity.internalServerError().body(problemDetails);
