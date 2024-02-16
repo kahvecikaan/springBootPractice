@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class BrandBusinessRules {
-    private BrandRepository brandRepository;
+    private final BrandRepository brandRepository;
     public void checkIfBrandNameExists(String name) throws BrandNameExistsException{
     if (brandRepository.existsByName(name)) {
             throw new BrandNameExistsException(name);
@@ -17,7 +17,7 @@ public class BrandBusinessRules {
     }
 
     public void validateBrandNameLength(String name) {
-        int minLength = 3;
+        int minLength = 2;
         int maxLength = 50;
 
         if(name.length() < minLength || name.length() > maxLength) {

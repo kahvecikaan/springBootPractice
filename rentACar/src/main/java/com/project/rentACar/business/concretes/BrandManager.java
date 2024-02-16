@@ -6,6 +6,7 @@ import com.project.rentACar.business.requests.UpdateBrandRequest;
 import com.project.rentACar.business.responses.GetAllBrandsResponse;
 import com.project.rentACar.business.responses.GetByIdBrandResponse;
 import com.project.rentACar.business.rules.BrandBusinessRules;
+import com.project.rentACar.core.utilities.exceptions.BrandNotFoundException;
 import com.project.rentACar.core.utilities.mappers.ModelMapperService;
 import com.project.rentACar.dataAccess.abstracts.BrandRepository;
 import com.project.rentACar.entities.concretes.Brand;
@@ -33,7 +34,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public GetByIdBrandResponse getById(int id) {
-        var brand = brandRepository.findById(id).orElseThrow();
+        var brand = brandRepository.findById(id)
+                .orElseThrow(() -> new BrandNotFoundException(id));
         return this.modelMapperService.forResponse().map(brand, GetByIdBrandResponse.class);
     }
 
