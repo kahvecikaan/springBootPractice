@@ -49,6 +49,18 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CarPlateExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleCarPlateExistsException(CarPlateExistsException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("CAR_PLATE_EXISTS", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleCarNotFoundException(CarNotFoundException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("CAR_NOT_FOUND", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
     // Generic exception handler
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetails> handleAllExceptions(Exception ex) {
