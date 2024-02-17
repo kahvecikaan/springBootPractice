@@ -27,8 +27,13 @@ public class CarManager implements CarService {
     @Override
     @Transactional
     public void add(CreateCarRequest request) {
-        this.carBusinessRules.checkIfPlateExists(request.getPlate());
+        // Sanitize the plate to remove any spaces
+        String sanitizedPlate = request.getPlate().replaceAll("\\s+", "");
+        this.carBusinessRules.checkIfPlateExists(sanitizedPlate);
         this.carBusinessRules.checkIfModelExists(request.getModelId());
+
+        // Update the request object with the sanitized plate
+        request.setPlate(sanitizedPlate);
 
         var car = this.modelMapperService.forRequest().map(request, Car.class);
         this.carRepository.save(car);
@@ -40,8 +45,10 @@ public class CarManager implements CarService {
         var existingCar = this.carRepository.findById(request.getId()).
                 orElseThrow(() -> new CarNotFoundException(request.getId()));
 
-        if(request.getModelId() != null) {
-            this.carBusinessRules.checkIfModelExists(request.getModelId());
+        // Sanitize the plate if it's not null before updating
+        if (request.getPlate() != null) {
+            String sanitizedPlate = request.getPlate().replaceAll("\\s+", "");
+            request.setPlate(sanitizedPlate);
         }
 
         modelMapperService.forRequest().map(request, existingCar);
