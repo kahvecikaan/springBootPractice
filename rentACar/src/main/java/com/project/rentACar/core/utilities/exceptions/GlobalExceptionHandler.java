@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,18 @@ public class GlobalExceptionHandler{
     public ResponseEntity<ApiErrorResponse> handleCarNotFoundException(CarNotFoundException ex) {
         ApiErrorResponse response = new ApiErrorResponse("CAR_NOT_FOUND", ex.getMessage(), null);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ApiErrorResponse> handleIOException(IOException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("IO_ERROR", "Failed to store the image", List.of(ex.getMessage()));
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalStateException(IllegalStateException ex) {
+        ApiErrorResponse response = new ApiErrorResponse("INVALID_IMAGE", ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // Generic exception handler
