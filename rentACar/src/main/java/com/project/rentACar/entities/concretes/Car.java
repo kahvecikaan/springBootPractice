@@ -31,4 +31,7 @@ public class Car {
     @ManyToOne // A model can have many cars
     @JoinColumn(name="model_id")
     private Model model;
+
+    @Column(name="image_path")
+    private String imagePath; // Field to store the image path
 }
