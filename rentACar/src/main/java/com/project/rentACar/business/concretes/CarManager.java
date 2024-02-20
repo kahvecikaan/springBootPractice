@@ -1,6 +1,7 @@
 package com.project.rentACar.business.concretes;
 
 import com.project.rentACar.business.abstracts.CarService;
+import com.project.rentACar.business.abstracts.ImageStorageService;
 import com.project.rentACar.business.requests.CreateCarRequest;
 import com.project.rentACar.business.requests.UpdateCarRequest;
 import com.project.rentACar.business.responses.GetAllCarsResponse;
@@ -14,7 +15,9 @@ import com.project.rentACar.entities.concretes.Car;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,6 +26,7 @@ public class CarManager implements CarService {
     private final CarRepository carRepository;
     private final ModelMapperService modelMapperService;
     private final CarBusinessRules carBusinessRules;
+    private final ImageStorageService imageStorageService;
 
     @Override
     @Transactional
@@ -92,5 +96,15 @@ public class CarManager implements CarService {
         ).toList();
 
         return response;
+    }
+
+    @Override
+    public void uploadCarImage(int carId, MultipartFile image) {
+        var car = carRepository.findById(carId)
+                .orElseThrow(() -> new CarNotFoundException(carId));
+
+        String imagePath = imageStorageService.storeImage(image);
+        car.setImagePath(imagePath);
+        carRepository.save(car);
     }
 }

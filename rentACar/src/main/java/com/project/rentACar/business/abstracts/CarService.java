@@ -5,7 +5,9 @@ import com.project.rentACar.business.requests.UpdateCarRequest;
 import com.project.rentACar.business.responses.GetAllCarsResponse;
 import com.project.rentACar.business.responses.GetByIdCarResponse;
 import com.project.rentACar.business.responses.GetByModelIdCarResponse;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface CarService {
@@ -15,4 +17,5 @@ public interface CarService {
     GetByIdCarResponse getById(int id);
     List<GetAllCarsResponse> getAll();
     List<GetByModelIdCarResponse> getByModelId(int modelId);
+    void uploadCarImage(int carId, MultipartFile image);
 }
