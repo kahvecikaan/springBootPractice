@@ -6,17 +6,21 @@ import com.project.rentACar.business.requests.UpdateCarRequest;
 import com.project.rentACar.business.responses.GetAllCarsResponse;
 import com.project.rentACar.business.responses.GetByIdCarResponse;
 import com.project.rentACar.business.responses.GetByModelIdCarResponse;
+import com.project.rentACar.core.validation.annotations.ValidImageExtension;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cars")
 @AllArgsConstructor
+@Validated
 public class CarsController {
     private final CarService carService;
 
@@ -54,5 +58,11 @@ public class CarsController {
     public ResponseEntity<Void> delete(@PathVariable int id) { // get id from path
         this.carService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{carId}/uploadImage") // like /api/cars/1/uploadImage
+    public ResponseEntity<String> uploadCarImage(@PathVariable int carId, @RequestParam("image") @ValidImageExtension MultipartFile image) {
+        carService.uploadCarImage(carId, image);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
