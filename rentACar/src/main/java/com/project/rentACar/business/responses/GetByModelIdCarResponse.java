@@ -14,4 +14,5 @@ public class GetByModelIdCarResponse {
     private int modelId;
     private String modelName;
     private int state;
+    private String imagePath;
 }

@@ -21,14 +21,13 @@ public class UpdateCarRequest {
     private Double dailyPrice; // Use Double instead of double to allow null values
 
     @ValidModelYear
-    private Integer modelYear; // Use Integer instead of int
+    private Integer modelYear;
 
     @ValidState
-    private Integer state; // No validation needed as it's optional
+    private Integer state;
 
     private Integer modelId; // Use Integer to allow null values
 
     @Pattern(regexp = "^(0[1-9]|[1-7][0-9]|8[0-1]) ?([A-Za-z]{1,3}) ?([0-9]{1,4})$", message = "Invalid plate format.")
     private String plate;
-
 }

@@ -14,4 +14,5 @@ public class GetAllCarsResponse {
     private String plate;
     private int state;
     private int modelId;
+    private String imagePath;
 }
